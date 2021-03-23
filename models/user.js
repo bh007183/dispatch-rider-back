@@ -28,6 +28,11 @@ password: {
     type: DataTypes.STRING,
     allowNull: false
 
+},
+isOnline: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+
 }
 
 }, {

@@ -7,6 +7,9 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.TEXT,
         allowNull: false
       },
+      participants: {
+        type: DataTypes.STRING
+      }
      
     }, {
       // Other model options go here
