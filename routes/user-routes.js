@@ -28,17 +28,22 @@ router.put("/api/update/account", async (req, res) => {
   }).catch((err) => res.json(err));
   res.json(data).end();
 });
-
+///////////////////////////////////
 router.post("/login", async (req, res) => {
   let data = await db.User.findOne({
     where: {
       username: req.body.username,
     },
   }).catch((err) => console.error(err));
-console.log(data.dataValues.username)
+if(data){
   let match = await bcrypt.compare(req.body.password, data.password);
   if (match) {
-    db.User.update({ isOnline: true }, { where: {username: data.dataValues.username} });
+   db.User.update({ isOnline: true }, { where: {username: data.dataValues.username} });
+   let friends = await db.User.find({
+        where: {
+            UserId: data.dataValues.id
+        }
+    })
     jwt.sign(
       {
            id: data.dataValues.id, 
@@ -51,13 +56,15 @@ console.log(data.dataValues.username)
         if (err) {
           res.json(err + "line 49 user-routes");
         }
-        res.json({auth: token, id: data.dataValues.username}).end();
+        res.json({auth: token, id: data.dataValues.firstName, friends: friends}).end();
       }
     );
   } else {
-    res.json("error on line 51 user-routes");
+    res.status(401).end();
   }
-
+}else{
+    res.status(401)
+}
 //   console.log(token);
 });
 
