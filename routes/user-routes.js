@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const db = require("../models");
-
+const { Op } = require("sequelize")
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
@@ -21,10 +21,10 @@ router.post("/api/create/account", async (req, res) => {
 });
 
 router.put("/api/update/account", async (req, res) => {
-  console.log(req);
-  let encrypted = await bcrypt.hash(req.body.password, saltRounds);
-  let data = await db.User.update(req.body, {
-    where: {},
+  console.log(req.body);
+//   let encrypted = await bcrypt.hash(req.body.password, saltRounds);
+  let data = await db.User.update({connections: "3, 4"}, {
+    where: {firstName: req.body.firstName},
   }).catch((err) => res.json(err));
   res.json(data).end();
 });
@@ -38,12 +38,26 @@ router.post("/login", async (req, res) => {
 if(data){
   let match = await bcrypt.compare(req.body.password, data.password);
   if (match) {
+
    db.User.update({ isOnline: true }, { where: {username: data.dataValues.username} });
-   let friends = await db.User.find({
-        where: {
-            UserId: data.dataValues.id
+
+
+   let arr = JSON.parse(data.dataValues.connections)
+
+    let friends = await db.User.findAll(
+         {attributes: { exclude: ['password', "username", "email", "updatedAt", "createdAt"] },
+        where:{
+        id: {
+            [Op.in]: arr
         }
-    })
+        
+       },
+    }).catch(err => res.json("error on line 51 in user routes"))
+   
+
+
+
+
     jwt.sign(
       {
            id: data.dataValues.id, 
