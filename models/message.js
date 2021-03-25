@@ -9,6 +9,9 @@ module.exports = function (sequelize, DataTypes) {
       },
       participants: {
         type: DataTypes.STRING
+      },
+      author: {
+        type: DataTypes.INTEGER
       }
      
     }, {

@@ -24,7 +24,7 @@ router.put("/api/update/account", async (req, res) => {
   console.log(req.body);
   //   let encrypted = await bcrypt.hash(req.body.password, saltRounds);
   let data = await db.User.update(
-    { connections: "3, 4" },
+    { connections: "[1, 3]" },
     {
       where: { firstName: req.body.firstName },
     }
@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
           if (err) {
             res.json(err + "line 49 user-routes");
           }
-          res.json({ auth: token, id: data.dataValues.firstName }).end();
+          res.json({ auth: token, id: data.dataValues.id }).end();
         }
       );
     } else {

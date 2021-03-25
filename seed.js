@@ -36,21 +36,21 @@ let message = [
         
        message: "Lorem Ipsom test test 12434",
        participants: "[1, 2]",
-    //    UserId: 1
+       author: 4
        
       },
     {
         
        message: "Frank Test Test Test",
-       participants: "[1, 2]",
-    //    UserId: 2,
+       participants: "[1, 4]",
+       author: 1
        
       },
     {
         
        message: "group text",
-       participants: "[1, 2, 3]",
-    //    UserId: 3,
+       participants: "[1, 2, 3, 4]",
+       author: 4
        
       },
       

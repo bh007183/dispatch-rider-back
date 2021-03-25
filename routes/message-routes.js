@@ -19,6 +19,49 @@ router.post("/api/create/message", async (req, res) => {
 })
 
 router.post("/sendMessage", async (req, res) => {
+    // let token = false;
+    // if (!req.headers) {
+    //   token = false;
+    // } else if (!req.headers.authorization) {
+    //   token = false;
+    // } else {
+    //   token = req.headers.authorization.split(" ")[1];
+    // }
+    // if (!token) {
+    //   res.status(500);
+    // } else {
+    //   const data = await jwt.verify(token, process.env.JSON_RIO, (err, data) => {
+    //     if (err) {
+    //       res.status(403).end();
+    //     } else {
+    //       return data;
+    //     }
+    //   });
+    //   if (data) {
+        let postedData = await db.Message.create({
+            message: req.body.message,
+            participants: JSON.stringify(req.body.participants),
+            author: req.body.author
+        }).catch(err => res.json(err))
+        
+        let messages = await db.Message.findAll({
+            where: {
+                participants: postedData.dataValues.participants
+            }
+         }).catch(err => res.json(err))
+         res.json(messages)
+
+
+    //   } else {
+    //     res.status(403);
+    //   }
+    // }
+  });
+
+router.get("/conversation/specific/:participants", async (req, res) => {
+    let test = req.params.participants.split(',')
+    let personArr = JSON.stringify(test)
+    console.log(personArr)
     let token = false;
     if (!req.headers) {
       token = false;
@@ -32,15 +75,16 @@ router.post("/sendMessage", async (req, res) => {
     } else {
       const data = await jwt.verify(token, process.env.JSON_RIO, (err, data) => {
         if (err) {
-          return false;
+          res.status(403).end();
         } else {
           return data;
         }
       });
       if (data) {
-        let postedData = await db.Message.create({
-            message: req.body.message,
-            participants: JSON.stringify(req.body.participants)
+        let postedData = await db.Message.findAll({
+           where: {
+               participants: personArr
+           }
         }).catch(err => res.json(err))
         res.json(postedData)
 
