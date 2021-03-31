@@ -58,6 +58,26 @@ router.post("/sendMessage", async (req, res) => {
     // }
   });
 
+  const WebSocket = require('ws'); // new
+  socket.on('message', function(message) {
+    console.log('Received: ' + message);
+  });
+  // express code 
+  const socketServer = new WebSocket.Server({port: 3030});
+  socketServer.on('connection', (socketClient) => {
+    console.log('connected');
+
+
+    // console.log('client Set length: ', socketServer.clients.size);
+    socketClient.on('close', (socketClient) => {
+      console.log('closed');
+      console.log('Number of clients: ', socketServer.clients.size);
+    });
+  });
+
+
+
+  
 router.get("/conversation/specific/:participants", async (req, res) => {
     let test = req.params.participants.split(',')
     let personArr = JSON.stringify(test)
