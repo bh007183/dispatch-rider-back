@@ -97,6 +97,8 @@ router.get("/friends", async (req, res) => {
         },
       }).catch(err =>console.error(err))
         let arr = JSON.parse(individual.dataValues.connections);
+        // console.log({test: individual.dataValues.connections})
+        // console.log({test: arr})
 
         let friends = await db.User.findAll({
           attributes: {
@@ -168,4 +170,49 @@ console.log(data)
 res.json(data)
 })
 
+
+router.post("/addFriend", async (req, res) => {
+  console.log(req.body)
+  let token = false;
+  if (!req.headers) {
+    token = false;
+  } else if (!req.headers.authorization) {
+    token = false;
+  } else {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    res.status(500);
+  } else {
+    const data = await jwt.verify(token, process.env.JSON_RIO, (err, data) => {
+      if (err) {
+        return false;
+      } else {
+        return data;
+      }
+    })
+    if (data) {
+      let individual = await db.User.findOne({
+        where: {
+          id: data.id,
+        },
+      }).catch(err =>console.error(err))
+      let connectionsArr = JSON.parse(individual.dataValues.connections)
+      connectionsArr.push(parseInt(req.body.id))
+
+      let updateConnections = await db.User.update(
+        { connections: JSON.stringify(connectionsArr)
+      },
+      {
+        where:{
+          id: individual.dataValues.id
+        }
+      }
+      )
+      console.log(individual)
+    }else{
+      console.log()
+    }
+  }
+})
 module.exports = router;
