@@ -123,4 +123,49 @@ router.get("/friends", async (req, res) => {
   }
 });
 
+router.get("/friendSearch/:input", async (req, res)=>{
+let data = await db.User.findAll({
+  attributes: {
+    exclude: [
+      "password",
+      "username",
+      "email",
+      "updatedAt",
+      "createdAt",
+    ],
+  },
+where:{
+  firstName: {
+    [Op.like]: "%" + req.params.input + "%"
+  }
+}
+}).catch(err => console.error(err))
+console.log(data)
+res.json(data)
+})
+
+
+router.get("/friendSearch/exactsearch/:input", async (req, res)=>{
+  const fullName = req.params.input.split(" ")
+let data = await db.User.findAll({
+  attributes: {
+    exclude: [
+      "password",
+      "username",
+      "email",
+      "updatedAt",
+      "createdAt",
+    ],
+  },
+where:{
+  firstName: fullName[0],
+  lastName: fullName[1]
+
+
+}
+}).catch(err => console.error(err))
+console.log(data)
+res.json(data)
+})
+
 module.exports = router;
