@@ -21,7 +21,7 @@ router.post("/api/create/account", async (req, res) => {
 });
 
 router.put("/api/update/account", async (req, res) => {
-  console.log(req.body);
+  
   //   let encrypted = await bcrypt.hash(req.body.password, saltRounds);
   let data = await db.User.update(
     { connections: "[1, 3]" },
@@ -71,7 +71,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/friends", async (req, res) => {
-  console.log(req.headers);
+  
   let token = false;
   if (!req.headers) {
     token = false;
@@ -116,7 +116,7 @@ router.get("/friends", async (req, res) => {
             },
           },
         }).catch((err) => res.json("error on line 51 in user routes"));
-        console.log(friends)
+        
         res.json(friends).end();
       
     } else {
@@ -142,7 +142,7 @@ where:{
   }
 }
 }).catch(err => console.error(err))
-console.log(data)
+
 res.json(data)
 })
 
@@ -166,13 +166,13 @@ where:{
 
 }
 }).catch(err => console.error(err))
-console.log(data)
+
 res.json(data)
 })
 
 
 router.post("/addFriend", async (req, res) => {
-  console.log(req.body)
+  
   let token = false;
   if (!req.headers) {
     token = false;
