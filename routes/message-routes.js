@@ -81,7 +81,7 @@ router.post("/sendMessage", async (req, res) => {
 router.get("/conversation/specific/:participants", async (req, res) => {
     let test = req.params.participants.split(',')
     let personArr = JSON.stringify(test)
-    console.log(personArr)
+    // console.log(personArr)
     let token = false;
     if (!req.headers) {
       token = false;
@@ -107,6 +107,41 @@ router.get("/conversation/specific/:participants", async (req, res) => {
            }
         }).catch(err => res.json(err))
         res.json(postedData)
+
+
+      } else {
+        res.status(403);
+      }
+    }
+  });
+
+  router.get("/conversation", async (req, res) => {
+    let token = false;
+    if (!req.headers) {
+      token = false;
+    } else if (!req.headers.authorization) {
+      token = false;
+    } else {
+      token = req.headers.authorization.split(" ")[1];
+    }
+    if (!token) {
+      res.status(500);
+    } else {
+      const data = await jwt.verify(token, process.env.JSON_RIO, (err, data) => {
+        if (err) {
+          res.status(403).end();
+        } else {
+          return data;
+        }
+      });
+      if (data) {
+        let id = data.id
+        let postedData = await db.Message.findAll().catch(err => res.json(err))
+        console.log(postedData)
+
+        for(let i = 0; i < postedData.length; i++){
+         console.log(postedData[i].dataValues.participants)
+        }
 
 
       } else {
