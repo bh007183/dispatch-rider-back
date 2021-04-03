@@ -132,17 +132,21 @@ router.get("/conversation", async (req, res) => {
       let resArr = [];
       for (let i = 0; i < postedData.length; i++) {
         if (postedData[i].dataValues.participants.includes(data.id)) {
-          let exactMatch = await db.Message.findAll({
+          let exactMatch = await db.Message.findOne({
             where: {
               participants: postedData[i].dataValues.participants,
             },
           }).catch((err) => console.error(err));
-          resArr.push(exactMatch);
+          
+            resArr.push(JSON.stringify(exactMatch));
+          
+          
         }
       }
       
       let reducedArr = [...new Set(resArr)]
-      console.log(reducedArr)
+      
+      res.json(reducedArr.map(item => JSON.parse(item)))
     } else {
       res.status(403);
     }
