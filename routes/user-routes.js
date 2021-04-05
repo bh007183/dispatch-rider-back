@@ -209,7 +209,7 @@ router.post("/addFriend", async (req, res) => {
         }
       }
       )
-      console.log(individual)
+      res.json("success")
     }else{
       console.log()
     }
