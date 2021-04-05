@@ -106,6 +106,60 @@ router.get("/conversation/specific/:participants", async (req, res) => {
     }
   }
 });
+///////////////////////////////////////////////////////////////////////
+router.get("/groupconversation/specific/:participants", async (req, res) => {
+  
+  let personArr = req.params.participants.split(",");
+
+  let token = false;
+  if (!req.headers) {
+    token = false;
+  } else if (!req.headers.authorization) {
+    token = false;
+  } else {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    res.status(500);
+  } else {
+    const data = await jwt.verify(token, process.env.JSON_RIO, (err, data) => {
+      if (err) {
+        res.status(403).end();
+      } else {
+        return data;
+      }
+    });
+    if (data) {
+
+      let participantDataArr = []
+
+      for(let i  = 0; i < personArr.length; i++){
+        let individual = await db.User.findOne({
+          attributes: {
+                exclude: [
+                  "password",
+                  "username",
+                  "email",
+                  "updatedAt",
+                  "createdAt",
+                ],
+              },
+          where: {
+            id: parseInt(personArr[i]),
+          },
+        }).catch(err =>console.error(err))
+        
+        participantDataArr.push(individual.dataValues)
+
+      }
+      res.json(participantDataArr)
+    } else {
+      res.status(403);
+    }
+  }
+});
+/////////////////////////
+
 
 router.get("/conversation", async (req, res) => {
   let token = false;
@@ -187,7 +241,7 @@ router.put("/update/participants", async (req, res) => {
           participants: JSON.stringify(req.body.old)
         }
       })
-      
+      res.json(newArr)
     } else {
       res.status(403);
     }
