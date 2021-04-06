@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 var corsOptions = {
-  origin: 'https://dispatch-rider-front.herokuapp.com/'
+  origin: 'https://dispatch-rider-front.herokuapp.com'
 }
 // corsOptions
 app.use(cors(corsOptions));
