@@ -309,15 +309,15 @@ router.put("/unsubscribe", async (req, res) => {
 
 
 
-const WebSocket = require('ws');
-var port = process.env.PORT || 3030
-const wss = new WebSocket.Server({ port });
+// const WebSocket = require('ws');
+// var port = process.env.PORT || 3030
+// const wss = new WebSocket.Server({ port });
 
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    ws.send(message);
-  });
-});
+// wss.on('connection', function connection(ws) {
+//   ws.on('message', function incoming(message) {
+//     ws.send(message);
+//   });
+// });
 
 
 
