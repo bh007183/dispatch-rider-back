@@ -248,4 +248,76 @@ router.put("/update/participants", async (req, res) => {
   }
 });
 
+router.delete("/deleteMessage/:id", async (req, res) => {
+  let token = false;
+  if (!req.headers) {
+    token = false;
+  } else if (!req.headers.authorization) {
+    token = false;
+  } else {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    res.status(500);
+  } else {
+    const data = await jwt.verify(token, process.env.JSON_RIO, (err, data) => {
+      if (err) {
+        res.status(403).end();
+      } else {
+        return data;
+      }
+    });
+    if (data) {
+     let newData = await db.Message.destroy({
+       where:{
+         id: req.params.id
+       }
+     }).catch(err => {console.error(err)})
+     console.log(newData)
+    } else {
+      res.status(403);
+    }
+  }
+});
+
+router.put("/unsubscribe", async (req, res) => {
+  let token = false;
+  if (!req.headers) {
+    token = false;
+  } else if (!req.headers.authorization) {
+    token = false;
+  } else {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    res.status(500);
+  } else {
+    const data = await jwt.verify(token, process.env.JSON_RIO, (err, data) => {
+      if (err) {
+        res.status(403).end();
+      } else {
+        return data;
+      }
+    });
+    if (data) {
+    
+     let newArr = [...req.body]
+     let index = newArr.indexOf(data.id.toString())
+     newArr.splice(index, 1)
+     console.log(newArr)
+     console.log(req.body)
+      
+      let newData = await db.Message.update({participants: JSON.stringify(newArr)},{
+        where: {
+          participants: JSON.stringify(req.body)
+        }
+      }).catch(err => console.error(err))
+      res.json("Success")
+      
+    } else {
+      res.status(403);
+    }
+  }
+});
+
 module.exports = router;
