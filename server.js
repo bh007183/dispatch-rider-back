@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+var expressWs = require('express-ws')(app);
 
 
 const cors = require("cors");
@@ -12,27 +13,25 @@ var PORT = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-var corsOptions = {
-  origin: 'https://dispatch-rider-front.herokuapp.com'
-}
+// var corsOptions = {
+//   origin: 'https://dispatch-rider-front.herokuapp.com'
+// }
 // corsOptions
-app.use(cors(corsOptions));
+app.use(cors());
 // Static directory
 app.use(express.static("public"));
 /////////////////////////////////
 const message = require("./routes/message-routes.js")
 const user = require("./routes/user-routes.js")
 
-const {Server} = require('ws');
 
-const wss = new Server({server: app});
-
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    ws.send(message);
-    console.log(message)
+app.ws('/test', function (ws, req) {
+  ws.on('message', function(msg) {
+    console.log(msg);
   });
-});
+  console.log('socket', req.testing);
+})
+
 
 // Routes
 // =============================================================
