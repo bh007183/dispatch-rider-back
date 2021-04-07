@@ -27,9 +27,9 @@ const user = require("./routes/user-routes.js")
 
 app.ws('/test', function (ws, req) {
   ws.on('message', function(msg) {
-    console.log(msg);
+    ws.send(msg);
   });
-  console.log('socket', req.testing);
+  // console.log('socket', req.testing);
 })
 
 
