@@ -13,11 +13,11 @@ var PORT = process.env.PORT || 8080;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-var corsOptions = {
-  origin: 'https://dispatch-rider-front.herokuapp.com'
-}
+// var corsOptions = {
+//   origin: 'https://dispatch-rider-front.herokuapp.com'
+// }
 // corsOptions
-app.use(cors(corsOptions));
+app.use(cors());
 // Static directory
 app.use(express.static("public"));
 /////////////////////////////////
