@@ -6,6 +6,8 @@ const saltRounds = 10;
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
+const express = require("express");
+const server = express();
 
 router.post("/api/create/message", async (req, res) => {
   let data = await db.Message.create({
@@ -309,15 +311,6 @@ router.put("/unsubscribe", async (req, res) => {
 
 
 
-const WebSocket = require('ws');
-var port = process.env.PORT || 3030
-const wss = new WebSocket.Server({ port });
-
-wss.on('connection', function connection(ws) {
-  ws.on('message', function incoming(message) {
-    ws.send(message);
-  });
-});
 
 
 
