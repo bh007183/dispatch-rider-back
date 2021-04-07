@@ -1,5 +1,5 @@
 const express = require("express");
-const server = express();
+const app = express();
 
 
 const cors = require("cors");
@@ -9,23 +9,23 @@ var PORT = process.env.PORT || 8080;
 
 
 // Sets up the Express app to handle data parsing
-server.use(express.urlencoded({ extended: true }));
-server.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 var corsOptions = {
   origin: 'https://dispatch-rider-front.herokuapp.com'
 }
 // corsOptions
-server.use(cors(corsOptions));
+app.use(cors(corsOptions));
 // Static directory
-server.use(express.static("public"));
+app.use(express.static("public"));
 /////////////////////////////////
 const message = require("./routes/message-routes.js")
 const user = require("./routes/user-routes.js")
 
 const {Server} = require('ws');
 
-const wss = new Server({server});
+const wss = new Server({server: app});
 
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
@@ -36,15 +36,15 @@ wss.on('connection', function connection(ws) {
 
 // Routes
 // =============================================================
-server.use(message)
-server.use(user)
+app.use(message)
+app.use(user)
 
 // Syncing our sequelize models and then starting our Express app
 // =============================================================
 
 // Change force: to true if it's cool for the site to remove database items.
 db.sequelize.sync({ force: false}).then(function () {
-  server.listen(PORT, function () {
+  app.listen(PORT, function () {
     console.log("App listening on PORT http://localhost:" + PORT);
   });
 });
