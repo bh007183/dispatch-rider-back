@@ -39,6 +39,18 @@ router.ws("/test", function (ws, req) {
   };
 });
 
+router.ws("/bru", function (ws, req) {
+  // console.log("connect")
+  ws.onmessage = (event) => {
+    console.log(event.data)
+    // aWss.clients.forEach(client => {
+      ws.send(event.data)
+    // })
+  }
+    
+     
+  });
+
 router.post("/sendMessage", async (req, res) => {
   // 
   
@@ -61,18 +73,9 @@ router.post("/sendMessage", async (req, res) => {
   //     }
   //   });
   //   if (data) {
-  const aWss = expressWs.getWss();
+  
 
-  router.ws("/bru", function (ws, req) {
-    ws.onmessage = (event) => {
-      console.log(event.data)
-      // aWss.clients.forEach(client => {
-        ws.send(event.data)
-      // })
-    }
-      
-       
-    });
+  
   console.log(req.body.participants);
   let postedData = await db.Message.create({
     message: req.body.message,
