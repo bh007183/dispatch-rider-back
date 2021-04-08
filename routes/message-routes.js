@@ -40,12 +40,10 @@ router.ws("/test", function (ws, req) {
 });
 
 router.ws("/bru", function (ws, req) {
-  // console.log("connect")
+  console.log("connection made")
   ws.onmessage = (event) => {
     console.log(event.data)
-    // aWss.clients.forEach(client => {
       ws.send(event.data)
-    // })
   }
     
      
@@ -74,7 +72,7 @@ router.post("/sendMessage", async (req, res) => {
   //   });
   //   if (data) {
   
-
+   
   
   console.log(req.body.participants);
   let postedData = await db.Message.create({
