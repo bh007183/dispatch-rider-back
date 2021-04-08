@@ -21,12 +21,12 @@ router.post("/api/create/message", async (req, res) => {
 });
 
 
-const aWss = expressWs.getWss();
+const aWss = expressWs.getWss().clients;
 
 router.ws("/bru", function (ws, req) {
   console.log("connnect")
   ws.onmessage = function (msg) {
-   
+    // ws.send(msg.data);
     aWss.clients.forEach(function (client) {
       ws.send(msg.data);
       console.log(msg.data)
