@@ -22,18 +22,7 @@ app.use(express.static("public"));
 const message = require("./routes/message-routes.js");
 const user = require("./routes/user-routes.js");
 
-// const aWss = expressWs.getWss();
 
-// app.ws("/test", function (ws, req) {
-//   ws.onmessage = function (msg) {
-//     aWss.clients.forEach(function (client) {
-//       ws.send(msg.data);
-//       console.log(msg.data)
-//     });
-//   };
-// });
-
-// Routes
 // =============================================================
 app.use(message);
 app.use(user);
