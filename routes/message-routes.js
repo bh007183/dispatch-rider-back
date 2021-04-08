@@ -21,18 +21,7 @@ router.post("/api/create/message", async (req, res) => {
 });
 
 
-const aWss = expressWs.getWss().clients;
 
-router.ws("/bru", function (ws, req) {
-  console.log("connnect")
-  ws.onmessage = function (msg) {
-    // ws.send(msg.data);
-    aWss.clients.forEach(function (client) {
-      ws.send(msg.data);
-      console.log(msg.data)
-    });
-  }
-});
 
 // router.ws("/bru", function (ws, req) {
 //   console.log("connection made")
@@ -43,7 +32,7 @@ router.ws("/bru", function (ws, req) {
     
      
 //   });
-
+let testArr = []
 router.post("/sendMessage", async (req, res) => {
   // 
   
@@ -68,7 +57,7 @@ router.post("/sendMessage", async (req, res) => {
   //   if (data) {
   
    
-  
+  testArr = req.body
   console.log(req.body.participants);
   let postedData = await db.Message.create({
     message: req.body.message,
@@ -87,6 +76,19 @@ router.post("/sendMessage", async (req, res) => {
   //     res.status(403);
   //   }
   // }
+});
+
+const aWss = expressWs.getWss().clients;
+
+router.ws("/bru", function (ws, req) {
+  console.log("connnect")
+  ws.onmessage = function (msg) {
+    // ws.send(msg.data);
+    aWss.forEach(function (client) {
+      ws.send(msg.data);
+      console.log(msg.data)
+    });
+  }
 });
 
 router.get("/conversation/specific/:participants", async (req, res) => {
