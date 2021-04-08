@@ -21,33 +21,28 @@ router.post("/api/create/message", async (req, res) => {
 });
 
 
-// const aWss = expressWs.getWss();
-
-// router.ws("/test", function (ws, req) {
-//   console.log("connnect")
-//   ws.onmessage = function (msg) {
-//     // router.ws("/bru", function (ws, req) {
-//     //   console.log("routing")
-//     //    ws.send("blub")
-//     // });
-
-//     console.log("dango")
-//     aWss.clients.forEach(function (client) {
-//       ws.send(msg.data);
-//       console.log(msg.data)
-//     });
-//   };
-// });
+const aWss = expressWs.getWss();
 
 router.ws("/bru", function (ws, req) {
-  console.log("connection made")
-  ws.onmessage = (event) => {
-    console.log(event.data)
-      ws.send(event.data)
+  console.log("connnect")
+  ws.onmessage = function (msg) {
+   
+    aWss.clients.forEach(function (client) {
+      ws.send(msg.data);
+      console.log(msg.data)
+    });
   }
+});
+
+// router.ws("/bru", function (ws, req) {
+//   console.log("connection made")
+//   ws.onmessage = (event) => {
+//     console.log(event.data)
+//       ws.send(event.data)
+//   }
     
      
-  });
+//   });
 
 router.post("/sendMessage", async (req, res) => {
   // 
