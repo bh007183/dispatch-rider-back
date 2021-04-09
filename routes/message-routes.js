@@ -32,7 +32,7 @@ router.post("/api/create/message", async (req, res) => {
     
      
 //   });
-let testArr = []
+let testArr = {}
 router.post("/sendMessage", async (req, res) => {
   // 
   
@@ -57,8 +57,8 @@ router.post("/sendMessage", async (req, res) => {
   //   if (data) {
   
    
-  testArr = req.body
-  console.log(req.body.participants);
+    testArr = (req.body)
+    
   let postedData = await db.Message.create({
     message: req.body.message,
     participants: JSON.stringify(req.body.participants),
@@ -71,30 +71,53 @@ router.post("/sendMessage", async (req, res) => {
     },
   }).catch((err) => res.json(err));
   res.json(messages);
+  router.ws("/bru/:id", async function (ws, req) {
+    console.log("blob")
+  })
 
   //   } else {
   //     res.status(403);
   //   }
   // }
 });
+console.log(testArr + "ter")
 
-const aWss = expressWs.getWss().clients;
+///////////////
 
-router.ws("/bru", function (ws, req) {
-  console.log("connnect")
-  ws.onmessage = function (msg) {
-    // ws.send(msg.data);
-    aWss.forEach(function (client) {
-      ws.send(msg.data);
-      console.log(msg.data)
-    });
-  }
+router.ws("/bru/:id", async function (ws, req) {
+  let flag = false
+  console.log(req.params.id)
+  db.Message.findAll({
+    order:[['createdAt', 'DESC']]
+  }).then(data => {
+    console.log(data[0])
+
+  })
+
+  let test = req.params.id.split(",");
+  let personArr = JSON.stringify(test);
+ 
+ 
+    let postedData = await db.Message.findAll({
+      where: {
+        participants: personArr,
+      },
+      }).catch((err) => res.json(err));
+        let pastLength = postedData.length
+        flag = true
+
+
+  
 });
 
+///////////////
+
+
 router.get("/conversation/specific/:participants", async (req, res) => {
+  
+
   let test = req.params.participants.split(",");
   let personArr = JSON.stringify(test);
-  // console.log(personArr)
   let token = false;
   if (!req.headers) {
     token = false;
