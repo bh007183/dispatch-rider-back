@@ -23,16 +23,16 @@ router.post("/api/create/message", async (req, res) => {
 
 
 
-// router.ws("/bru", function (ws, req) {
-//   console.log("connection made")
-//   ws.onmessage = (event) => {
-//     console.log(event.data)
-//       ws.send(event.data)
-//   }
-    
-     
-//   });
-let testArr = {}
+router.ws("/bru", function (ws, req) {
+  console.log("connection made")
+  ws.onmessage = (event) => {
+    console.log(event.data)
+      ws.send(event.data)
+  }
+      
+  });
+
+
 router.post("/sendMessage", async (req, res) => {
   // 
   
@@ -57,7 +57,7 @@ router.post("/sendMessage", async (req, res) => {
   //   if (data) {
   
    
-    testArr = (req.body)
+
     
   let postedData = await db.Message.create({
     message: req.body.message,
@@ -71,7 +71,7 @@ router.post("/sendMessage", async (req, res) => {
     },
   }).catch((err) => res.json(err));
   res.json(messages);
-  router.ws("/bru/:id", async function (ws, req) {
+  router.ws("/bru", async function (ws, req) {
     console.log("blob")
   })
 
@@ -80,35 +80,14 @@ router.post("/sendMessage", async (req, res) => {
   //   }
   // }
 });
-console.log(testArr + "ter")
 
 ///////////////
 
-router.ws("/bru/:id", async function (ws, req) {
-  let flag = false
-  console.log(req.params.id)
-  db.Message.findAll({
-    order:[['createdAt', 'DESC']]
-  }).then(data => {
-    console.log(data[0])
-
-  })
-
-  let test = req.params.id.split(",");
-  let personArr = JSON.stringify(test);
- 
- 
-    let postedData = await db.Message.findAll({
-      where: {
-        participants: personArr,
-      },
-      }).catch((err) => res.json(err));
-        let pastLength = postedData.length
-        flag = true
-
+// router.ws("/bru/:id", async function (ws, req) {
+  
 
   
-});
+// });
 
 ///////////////
 
