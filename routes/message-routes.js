@@ -25,6 +25,9 @@ router.post("/api/create/message", async (req, res) => {
 
 router.ws("/bru", function (ws, req) {
   console.log("connection made")
+  // setInterval(() => {
+  //   ws.send(JSON.stringify("Keep Connection"))
+  // }, 30000);
   ws.onmessage = (event) => {
     console.log(event.data)
       ws.send(event.data)
@@ -81,15 +84,6 @@ router.post("/sendMessage", async (req, res) => {
   // }
 });
 
-///////////////
-
-// router.ws("/bru/:id", async function (ws, req) {
-  
-
-  
-// });
-
-///////////////
 
 
 router.get("/conversation/specific/:participants", async (req, res) => {
